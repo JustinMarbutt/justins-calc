@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="./style.css">
+<div ng-app ng-controller="Calc">
+    <div class="j-calc-wrapper">
+        <div class="j-calc-display">
+            <div class="j-calc-output" name="j-calc-output-decoy"></div>
+            <div class="j-calc-output" name="j-calc-output">0<!--{{output}}--></div>
+        </div>
+        <div class="j-calc-btns">
+            <div class="j-calc-btn-row">
+                <button name="j-calc-btnClear" class="j-calc-function-button" value="7" ng-click='clear()'>C<!--{{clearBtnDisplay}}--></button>
+                <button name="j-calc-btnSign" class="j-calc-function-button" value="8" ng-click='updateOutput(8)'>+/-</button>
+                <button name="j-calc-btnPercent" class="j-calc-function-button" value="9" ng-click='updateOutput(9)'>%</button>
+                <button name="j-calc-btnMult" class="j-calc-operation-btn" ng-click='divide()'>/</button>
+            </div>
+            <div class="j-calc-btn-row">
+                <button name="j-calc-btn7" class="j-calc-btn-number" value="7" ng-click='updateOutput(7)'>7</button>
+                <button name="j-calc-btn8" class="j-calc-btn-number" value="8" ng-click='updateOutput(8)'>8</button>
+                <button name="j-calc-btn9" class="j-calc-btn-number" value="9" ng-click='updateOutput(9)'>9</button>
+                <button name="j-calc-btnMult" class="j-calc-operation-btn" ng-click='multiply()'>X</button>
+            </div>
+            <div class="j-calc-btn-row">
+                <button name="j-calc-btn4" class="j-calc-btn-number" value="4" ng-click='updateOutput(4)'>4</button>
+                <button name="j-calc-btn5" class="j-calc-btn-number" value="5" ng-click='updateOutput(5)'>5</button>
+                <button name="j-calc-btn6" class="j-calc-btn-number" value="6" ng-click='updateOutput(6)'>6</button>
+                <button name="j-calc-btnMinus" class="j-calc-operation-btn" ng-click='subtract()'>-</button>
+            </div>
+            <div class="j-calc-btn-row">
+                <button name="j-calc-btn1" class="j-calc-btn-number" value="1" ng-click='updateOutput(1)'>1</button>
+                <button name="j-calc-btn2" class="j-calc-btn-number" value="2" ng-click='updateOutput(2)'>2</button>
+                <button name="j-calc-btn3" class="j-calc-btn-number" value="3" ng-click='updateOutput(3)'>3</button>
+                <button name="j-calc-btnPlus" class="j-calc-operation-btn" ng-click='add()'>+</button>
+            </div>
+            <div class="j-calc-btn-row">
+                <button name="j-calc-btn0" id="j-calc-btn0" class="j-calc-btn-number" value="0" ng-click='updateOutput(0)'>0</button>
+                <button name="j-calc-btnDot" class="j-calc-btn-number" value="." ng-click='updateOutput(.)'>.</button>
+                <button name="j-calc-btnEquals" class="j-calc-operation-btn" ng-click='calculate()'>=</button>
+            </div>
+        </div>
+    </div>
+</div>

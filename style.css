@@ -1,0 +1,56 @@
+.j-calc-wrapper{
+    width: 200px;
+    height: 300px;
+}
+.j-calc-display{
+    height: 28%;
+    background: black;
+    color: white;
+    font-weight: 100;
+    font-family: "Courier New";
+}
+.j-calc-output{
+    text-align: right;
+    width: 100%;
+    height: 50%;
+    font-size:40px;
+}
+.j-calc-btns{
+    height: 72%;
+}
+.j-calc-btn-row{
+    width:100%;
+    height:20%;
+    border-top: 1px solid #8A8989;
+}
+.j-calc-function-button{
+    background:#B7B7B7;
+    color:black;
+}
+.j-calc-operation-btn{
+    background:orange;
+    color:white;
+}
+.j-calc-btn-number{
+    background:#DEDEDE;
+    color:black;
+}
+.j-calc-function-button, .j-calc-operation-btn, .j-calc-btn-number{
+    width:25%;
+    margin:0;
+    border:none;
+    height: 100%;
+    float: left;
+    border-right:1px solid #8A8989;
+    border-left:none;
+    border-top:none;
+    font-size: 14px;
+}
+#j-calc-btn0{
+    width:50%;
+    text-align:left;
+    padding-left:20px;
+}
+.j-calc-btn-row button{
+
+}
