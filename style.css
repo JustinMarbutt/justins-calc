@@ -8,6 +8,7 @@
     color: white;
     font-weight: 100;
     font-family: "Courier New";
+    overflow:hidden;
 }
 .j-calc-output{
     text-align: right;
@@ -34,6 +35,7 @@
 .j-calc-btn-number{
     background:#DEDEDE;
     color:black;
+    font-size:16px !important;
 }
 .j-calc-function-button, .j-calc-operation-btn, .j-calc-btn-number{
     width:25%;
