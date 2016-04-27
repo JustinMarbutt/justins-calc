@@ -20,6 +20,8 @@ app.controller("Calc", function($scope) {
     // Indicates if an operation has been selected
     $scope.pendingOperation = false;
     
+    // Clear btn text for the user
+    $scope.clearBtnDisplay = "AC";
 
     // Constants
     var ADD_TOKEN = "+";
@@ -40,6 +42,7 @@ app.controller("Calc", function($scope) {
             $scope.output += String(btn);
         }
         $scope.pendingValue = toNumber($scope.output);
+        $scope.clearBtnDisplay = "C";
     };
 
     // Queues the next operation to take place in the calculator
@@ -104,6 +107,30 @@ app.controller("Calc", function($scope) {
         }
     };
 
+    $scope.clear = function(){
+        $scope.clearBtnDisplay = "AC";
+        if($scope.pendingValue != null && !$scope.pendingOperation){
+            $scope.pendingValue = null;
+            $scope.output = "0";
+        }
+        else if($scope.pendingOperation && $scope.pendingValue == null){
+            $scope.pendingOperation = false;
+            $scope.operationToken = "";
+            $scope.runningTotal = null
+            $scope.newNumber = true;
+        }
+        else if($scope.runningTotal != null  && $scope.pendingOperation){
+            $scope.output = "0";
+            $scope.pendingValue = null;
+        }
+        else{
+            $scope.pendingOperation = false;
+            $scope.operationToken = "";
+            $scope.runningTotal = null
+            $scope.newNumber = true;
+        }
+
+    }
 
     
     // Helper function to conver the strings in the display
