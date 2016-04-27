@@ -62,7 +62,7 @@ app.controller("Calc", function($scope) {
         $scope.operationToken = token;
         $scope.output = String($scope.runningTotal);
         $scope.newNumber = true;
-        $scope.pendingValue = null;
+        //$scope.pendingValue = null;
         $scope.pendingOperation = true;
     }
     
