@@ -109,8 +109,15 @@ app.controller("Calc", function($scope) {
 
     $scope.clear = function(){
         $scope.clearBtnDisplay = "AC";
-        if($scope.pendingValue != null && !$scope.pendingOperation){
+        if($scope.runningTotal != null && $scope.pendingOperation && $scope.pendingValue == null && $scope.output != "0"){
             $scope.pendingValue = null;
+            $scope.output = "0";
+        }
+        else if($scope.pendingValue != null && !$scope.pendingOperation){
+            $scope.pendingOperation = false;
+            $scope.operationToken = "";
+            $scope.runningTotal = null
+            $scope.newNumber = true;
             $scope.output = "0";
         }
         else if($scope.pendingOperation && $scope.pendingValue == null){
@@ -118,6 +125,7 @@ app.controller("Calc", function($scope) {
             $scope.operationToken = "";
             $scope.runningTotal = null
             $scope.newNumber = true;
+            $scope.output = "0";
         }
         else if($scope.runningTotal != null  && $scope.pendingOperation){
             $scope.output = "0";
