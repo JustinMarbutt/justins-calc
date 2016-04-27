@@ -82,6 +82,29 @@ app.controller("Calc", function($scope) {
         }
     };
 
+    // Performs the function of percentage on the displayed value
+    $scope.percentage = function(){
+        if(toNumber($scope.output) == $scope.pendingValue){
+            $scope.pendingValue = $scope.pendingValue / 100;
+            $scope.output = String($scope.pendingValue);
+        } else {
+            $scope.runningTotal = $scope.runningTotal / 100;
+            $scope.output = String($scope.runningTotal);
+        }
+    };
+
+    // Changes the sign of the output
+    $scope.changeSign = function(){
+        if(toNumber($scope.output) == $scope.pendingValue){
+            $scope.pendingValue = $scope.pendingValue * -1;
+            $scope.output = String($scope.pendingValue);
+        } else {
+            $scope.runningTotal = $scope.runningTotal * -1;
+            $scope.output = String($scope.runningTotal);
+        }
+    };
+
+
     
     // Helper function to conver the strings in the display
     // to numbers for calculation
