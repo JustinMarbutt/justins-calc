@@ -47,6 +47,12 @@ app.controller("Calc", function($scope) {
 
     // Queues the next operation to take place in the calculator
     $scope.queueOp = function(token){
+        if($scope.pendingValue == null){
+            $scope.pendingValue = 0;
+        }
+        if($scope.runningTotal == null){
+            $scope.runningTotal = 0;
+        }
         if($scope.newNumber){
             $scope.pendingValue = null;
         }
