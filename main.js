@@ -1,27 +1,51 @@
 var app = angular.module("justins-calc", []); 
-app.controller("Calc", function($scope) {
+
+app.service("Logger", function($http){
+    this.options = {
+        host: 'http://127.0.0.1:3000',
+        path: '/calclogger',
+        method: 'POST'
+    };
+
+    this.sendStuff = function(stuff){
+        var obj = {'answer': stuff}
+        $http.post(this.options.host+this.options.path, obj)
+        .then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("Success: ", response);
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.log("Error: ", response);
+        });
+    };
+
+});
+
+app.service("Calc", function(Logger) {
 
     // Bound to the output display
-    $scope.output = "0";
+    this.output = "0";
 
     // Used to evaluate whether to start a new number
     // in the display and when to concatenate
-    $scope.newNumber = true;
+    this.newNumber = true;
 
     // variable for the value to manipulate the total
-    $scope.pendingValue = null;
+    this.pendingValue = null;
 
     // The token corrisponding to the operation to be performed
-    $scope.operationToken = "";
+    this.operationToken = "";
 
     // The total value that the calculation answers are stored and displayed from
-    $scope.runningTotal = null;
+    this.runningTotal = null;
 
     // Indicates if an operation has been selected
-    $scope.pendingOperation = false;
+    this.pendingOperation = false;
     
     // Clear btn text for the user
-    $scope.clearBtnDisplay = "AC";
+    this.clearBtnDisplay = "AC";
 
     // Constants
     var ADD_TOKEN = "+";
@@ -30,118 +54,119 @@ app.controller("Calc", function($scope) {
     var DIVIDE_TOKEN = "/";
 
     // Updates the string of output displayed to the user
-    $scope.updateOutput = function (btn) {
-        if ($scope.output == "0" || $scope.newNumber) {
-            $scope.output = btn;
-            $scope.newNumber = false;
-            if(!$scope.pendingOperation){
-                $scope.runningTotal = null;
-                $scope.operationToken = "";
+    this.updateOutput = function (btn) {
+        if (this.output == "0" || this.newNumber) {
+            this.output = btn;
+            this.newNumber = false;
+            if(!this.pendingOperation){
+                this.runningTotal = null;
+                this.operationToken = "";
             }
         } else {
-            $scope.output += String(btn);
+            this.output += String(btn);
         }
-        $scope.pendingValue = toNumber($scope.output);
-        $scope.clearBtnDisplay = "C";
+        this.pendingValue = toNumber(this.output);
+        this.clearBtnDisplay = "C";
     };
 
     // Queues the next operation to take place in the calculator
-    $scope.queueOp = function(token){
-        if($scope.pendingValue == null){
-            $scope.pendingValue = 0;
+    this.queueOp = function(token){
+        if(this.pendingValue == null){
+            this.pendingValue = 0;
         }
-        if($scope.runningTotal == null){
-            $scope.runningTotal = 0;
+        if(this.runningTotal == null){
+            this.runningTotal = 0;
         }
-        if($scope.newNumber){
-            $scope.pendingValue = null;
+        if(this.newNumber){
+            this.pendingValue = null;
         }
-        if ($scope.pendingValue) {
-            $scope.runningTotal = $scope.pendingValue;
+        if (this.pendingValue) {
+            this.runningTotal = this.pendingValue;
         }
-        $scope.operationToken = token;
-        $scope.output = String($scope.runningTotal);
-        $scope.newNumber = true;
-        //$scope.pendingValue = null;
-        $scope.pendingOperation = true;
+        this.operationToken = token;
+        this.output = String(this.runningTotal);
+        this.newNumber = true;
+        //this.pendingValue = null;
+        this.pendingOperation = true;
     }
     
     // Performs the operation that has been queued with the 
     // runningTotal and the pending value
-    $scope.calculate = function () {
-        if($scope.operationToken != ""){
-            if (!$scope.newNumber) {
-                $scope.pendingValue = toNumber($scope.output);
-                $scope.lastValue = $scope.pendingValue;
+    this.calculate = function () {
+        if(this.operationToken != ""){
+            if (!this.newNumber) {
+                this.pendingValue = toNumber(this.output);
+                this.lastValue = this.pendingValue;
             }
-            if ($scope.operationToken == ADD_TOKEN) {
-                $scope.runningTotal += $scope.pendingValue;
-            } else if ($scope.operationToken == SUBTRACT_TOKEN) {
-                $scope.runningTotal -= $scope.pendingValue;
-            }else if ($scope.operationToken == MULTIPLY_TOKEN) {
-                $scope.runningTotal = $scope.runningTotal * $scope.pendingValue;
-            }else if ($scope.operationToken == DIVIDE_TOKEN) {
-                $scope.runningTotal = $scope.runningTotal / $scope.pendingValue;
+            if (this.operationToken == ADD_TOKEN) {
+                this.runningTotal += this.pendingValue;
+            } else if (this.operationToken == SUBTRACT_TOKEN) {
+                this.runningTotal -= this.pendingValue;
+            }else if (this.operationToken == MULTIPLY_TOKEN) {
+                this.runningTotal = this.runningTotal * this.pendingValue;
+            }else if (this.operationToken == DIVIDE_TOKEN) {
+                this.runningTotal = this.runningTotal / this.pendingValue;
             } else {
-                $scope.runningTotal = 0;
+                this.runningTotal = 0;
             }
-            $scope.output = String($scope.runningTotal);
-            $scope.newNumber = true;
-            $scope.pendingOperation = false;
+            this.output = String(this.runningTotal);
+            Logger.sendStuff(this.output);
+            this.newNumber = true;
+            this.pendingOperation = false;
         }
     };
 
     // Performs the function of percentage on the displayed value
-    $scope.percentage = function(){
-        if(toNumber($scope.output) == $scope.pendingValue){
-            $scope.pendingValue = $scope.pendingValue / 100;
-            $scope.output = String($scope.pendingValue);
+    this.percentage = function(){
+        if(toNumber(this.output) == this.pendingValue){
+            this.pendingValue = this.pendingValue / 100;
+            this.output = String(this.pendingValue);
         } else {
-            $scope.runningTotal = $scope.runningTotal / 100;
-            $scope.output = String($scope.runningTotal);
+            this.runningTotal = this.runningTotal / 100;
+            this.output = String(this.runningTotal);
         }
     };
 
     // Changes the sign of the output
-    $scope.changeSign = function(){
-        if(toNumber($scope.output) == $scope.pendingValue){
-            $scope.pendingValue = $scope.pendingValue * -1;
-            $scope.output = String($scope.pendingValue);
+    this.changeSign = function(){
+        if(toNumber(this.output) == this.pendingValue){
+            this.pendingValue = this.pendingValue * -1;
+            this.output = String(this.pendingValue);
         } else {
-            $scope.runningTotal = $scope.runningTotal * -1;
-            $scope.output = String($scope.runningTotal);
+            this.runningTotal = this.runningTotal * -1;
+            this.output = String(this.runningTotal);
         }
     };
 
-    $scope.clear = function(){
-        $scope.clearBtnDisplay = "AC";
-        if($scope.runningTotal != null && $scope.pendingOperation && $scope.pendingValue == null && $scope.output != "0"){
-            $scope.pendingValue = null;
-            $scope.output = "0";
+    this.clear = function(){
+        this.clearBtnDisplay = "AC";
+        if(this.runningTotal != null && this.pendingOperation && this.pendingValue == null && this.output != "0"){
+            this.pendingValue = null;
+            this.output = "0";
         }
-        else if($scope.pendingValue != null && !$scope.pendingOperation){
-            $scope.pendingOperation = false;
-            $scope.operationToken = "";
-            $scope.runningTotal = null
-            $scope.newNumber = true;
-            $scope.output = "0";
+        else if(this.pendingValue != null && !this.pendingOperation){
+            this.pendingOperation = false;
+            this.operationToken = "";
+            this.runningTotal = null
+            this.newNumber = true;
+            this.output = "0";
         }
-        else if($scope.pendingOperation && $scope.pendingValue == null){
-            $scope.pendingOperation = false;
-            $scope.operationToken = "";
-            $scope.runningTotal = null
-            $scope.newNumber = true;
-            $scope.output = "0";
+        else if(this.pendingOperation && this.pendingValue == null){
+            this.pendingOperation = false;
+            this.operationToken = "";
+            this.runningTotal = null
+            this.newNumber = true;
+            this.output = "0";
         }
-        else if($scope.runningTotal != null  && $scope.pendingOperation){
-            $scope.output = "0";
-            $scope.pendingValue = null;
+        else if(this.runningTotal != null  && this.pendingOperation){
+            this.output = "0";
+            this.pendingValue = null;
         }
         else{
-            $scope.pendingOperation = false;
-            $scope.operationToken = "";
-            $scope.runningTotal = null
-            $scope.newNumber = true;
+            this.pendingOperation = false;
+            this.operationToken = "";
+            this.runningTotal = null
+            this.newNumber = true;
         }
 
     }
@@ -157,4 +182,10 @@ app.controller("Calc", function($scope) {
         return result;
     };
 
+    return this;
+
+});
+
+app.controller("Calculator", function($scope, Calc){
+    $scope.calc = Calc;
 });
